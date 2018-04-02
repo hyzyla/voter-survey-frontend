@@ -68,7 +68,7 @@ export class StationSelectComponent implements OnInit  {
 
   onChange(value, type) {
     if (type === 'region') {
-      this.territoryService.district.getByRegion(value)
+      this.territoryService.district.getByRegion(new Region(value))
         .subscribe((districts: District[]) => {
           this.districts = districts;
         });

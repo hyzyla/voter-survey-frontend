@@ -6,7 +6,12 @@ import { Observable } from 'rxjs';
 import { Voter } from '../_models/voter';
 
 export class RegionService {
-	url = '/api/regions/';
+	
+	static url = '/api/regions/';
+
+	get url () {
+		return RegionService.url;
+	}
 	constructor(private http: HttpClient) { }
 
 	getAll(): Observable<Region[]> {
@@ -44,7 +49,7 @@ export class DistrictService {
 	constructor(private http: HttpClient) { }
 
 	getByRegion(region: Region): Observable<District[]> {
-		return this.http.get<District[]>(region.districts);
+		return this.http.get<District[]>(`${RegionService.url}${region.id}/districts/`);
 	}
 
 	getAll() {
