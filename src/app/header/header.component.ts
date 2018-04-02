@@ -65,7 +65,7 @@ export class HeaderComponent implements OnInit {
   Constituency
 
   displayAdminPanel() {
-    window.open(`${environment.urlApi}/admin`, "blank")
+    window.open(`${environment.urlApi}/admin/`, "blank")
     return false;
   }
 
