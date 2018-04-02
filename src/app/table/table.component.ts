@@ -162,7 +162,8 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   saveRecord() {
-    
+    console.log(this.rowData);
+    console.log(this.fromRowToVoter(this.rowData));
     const records = [...this.records];
     if (this.newRecord) {
       this.voterService.create(this.fromRowToVoter(this.rowData))
