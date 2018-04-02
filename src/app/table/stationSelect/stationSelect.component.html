@@ -1,0 +1,73 @@
+<!-- <label for="region">Область</label>
+  <select class="form-control" 
+          id="region"
+          required
+          name="selectedRegion"
+          [(ngModel)]="selectedRegion"
+          (ngModelChange)="onChange('region')">
+    <option *ngFor="let region of regions" [value]="region">{{region.name}}</option>
+</select>
+
+
+<label for="district">Район</label>
+  <select class="form-control" 
+          id="district"
+          required
+          [(ngModel)]="selectedDistrict" 
+          name="district"
+          (change)="onChange('district')">
+  <option *ngFor="let dist of districts" [value]="dist">{{dist.name}}</option>
+</select>
+
+<label for="station">Виборча дільниця</label>
+  <select class="form-control" 
+          id="station"
+          required
+          [(ngModel)]="selectedStation" 
+          name="station"
+          (change)="onChange('station')"
+          #station="ngModel">
+  <option *ngFor="let station of stations" [value]="station">{{station.number}}</option>
+</select> -->
+
+
+<form>
+  <div class="form-group">
+    <label for="selectedRegion">Область</label>
+    <p-dropdown 
+      [options]="regions" 
+      [style]="{'width':'100%'}"
+      [autoDisplayFirst]="false"
+      optionLabel="name"
+      [(ngModel)] = "selectedRegion"
+      [ngModelOptions]="{standalone: true}"
+      (onChange)="onChange($event.value, 'region')">
+    </p-dropdown>
+  </div>
+
+  <div class="form-group">
+    <label for="selectedDistrict">Район</label>
+    <p-dropdown 
+      [options]="districts" 
+      [style]="{'width':'100%'}"
+      [autoDisplayFirst]="false"
+      optionLabel="name"
+      [(ngModel)] = "selectedDistrict"
+      [ngModelOptions]="{standalone: true}"
+      (onChange)="onChange($event.value, 'district')">
+    </p-dropdown>
+  </div>
+
+  <div class="form-group">
+    <label for="station">Виборча дільниця</label>
+    <p-dropdown 
+      [options]="stations" 
+      [style]="{'width':'100%'}"
+      [autoDisplayFirst]="false"
+      optionLabel="number"
+      [(ngModel)] = "selectedStation"
+      [ngModelOptions]="{standalone: true}"
+      (onChange)="onChange($event.value, 'station')">
+    </p-dropdown>
+  </div> 
+</form>

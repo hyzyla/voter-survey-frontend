@@ -1,0 +1,115 @@
+
+<p-table #dt *ngIf="reinit" 
+  [columns]="selectedColumns" 
+  [value]="records" 
+  selectionMode="single"
+  datakey="ctrl" 
+  [(selection)]="selectedRecord" 
+  [resizableColumns]="true"
+  [scrollable]="true"
+  [scrollHeight]="tableHeight"
+  [autoLayout]="true"
+  
+  sortMode="single">
+  <!-- [(contextMenuSelection)]="selectedRecord"
+  [contextMenu]="cm" -->
+  
+  <ng-template pTemplate="colgroup" let-columns>
+    <colgroup>
+      <col *ngFor="let col of selectedColumns" >
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header" let-columns>
+    
+    <!-- column header -->
+    <tr>
+      <th style="width: 2.25em"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn><p-sortIcon [field]="col.field"></p-sortIcon>{{col.header}}</th>
+      <th pResizableColumn>
+        <div style="text-align:left">
+          <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                      selectedItemsLabel="{0} колонок обрано" [style]="{width: '100%'}" 
+                      defaultLabel="Виберіть колонки" appendTo="body">
+                    </p-multiSelect>
+       </div>
+      </th>
+    </tr>
+    
+    <!-- filter header -->
+    <tr>
+      <th style="padding: 0.3em;">
+        <button 
+          type="button" 
+          pButton 
+          icon="fa-times"
+          style="width: 1.6em;background: none;border: none;color: #2399e5;" 
+          (click)="dt.reset()"></button>
+      </th>
+      <th *ngFor="let col of columns">
+        <ng-container *ngIf="col.type === 1">
+          <div class="ui-g ui-g-nopad">
+            <div class="ui-g-6 ui-g-nopad" style="padding-right:0px">
+              <p-dropdown #dd
+                [(ngModel)]="col.filterType"
+                [options]="numberActionOptions" 
+                [style]="{'width':'100%'}"
+                [styleClass]="form-control"
+                appendTo="body"
+                (onChange)="filterNumbers(null, $event.value, col, dt)">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-6 ui-g-nopad" style="padding-left:opx">
+              <p-spinner #sp
+                [ngModel]="rangeValue"
+                (ngModelChange)="filterNumbers($event, null, col, dt)"
+                [ngModelOptions]="{standalone: true}"
+                class="full-width-input full-width-span">
+              </p-spinner>
+            </div>
+          </div>
+        </ng-container>
+
+        <input *ngIf="col.type === 2 && col.options.length === 0"
+          type="text" 
+          pInputText
+          style="width: 100%"
+          (input)="dt.filter($event.target.value, col.field, 'contains')">
+        <p-multiSelect *ngIf="col.type === 2 && col.options.length > 0"
+          [options]="getMultiselectOptions(col.options)" 
+          [style]="{'width':'100%'}"
+          [styleClass]="form-control"
+          defaultLabel="#" 
+          appendTo="body"
+          (onChange)="dt.filter($event.value, col.field, 'in')"> 
+        </p-multiSelect>
+      </th>
+      <th></th>
+
+    </tr>
+  </ng-template>
+  
+  <!-- records -->
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr [pSelectableRow]="rowData">
+      <td style="width: 2.25em"></td>
+      <td *ngFor="let col of columns" class="ui-resizable-column">{{rowData[col.field]}}</td>
+      <td></td>
+    </tr>
+  </ng-template>  
+
+  <!-- footer -->
+  <ng-template pTemplate="summary">
+      <div style="text-align:left">
+          <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Додати"></button>
+          <button type="button" pButton icon="fa-edit" (click)="showDialogToEdit()" label="Редагувати"></button>
+          <button type="button" pButton icon="fa-trash" (click)="deleteRecord()" label="Видалити"></button>
+          <button type="button" pButton icon="fa-angle-double-right" (click)="printValue()" label="Призначити"></button>
+          <button type="button" pButton icon="fa-download" (click)="exportRecords(dt)" label="Експорт в CSV"></button>
+        </div>
+  </ng-template>
+
+</p-table>  
+
+<!-- <p-contextMenu #cm [model]="contextMenu" appendTo="body"></p-contextMenu> -->
+<voter-dialog [(display)]="displayDialog" [(voter)]="rowData" (onFormSubmit)="saveRecord()"></voter-dialog>

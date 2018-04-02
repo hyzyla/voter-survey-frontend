@@ -1,0 +1,5 @@
+<app-header 
+        [user]="currentUser" 
+        (constituencyChanged)="table.loadData($event)"
+        (statusChanged)="table.loadColumns($event)"></app-header>
+<app-table #table></app-table>

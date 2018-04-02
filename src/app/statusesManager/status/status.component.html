@@ -1,0 +1,65 @@
+<p-tree [value]="statuses" 
+        (onNodeExpand)="loadNode($event.node)" 
+        selectionMode="single" 
+        [(selection)]="selectedNode" 
+        (onNodeContextMenuSelect)="makeContextMenu($event.node)" 
+        [contextMenu]="cm" 
+        draggableNodes="true" 
+        droppableNodes="false">
+      </p-tree>
+<p-contextMenu #cm appendTo="body" [model]="items"></p-contextMenu>
+
+
+<!-- форма редагування -->
+<p-dialog [(visible)]="displayForm" modal="true" appendTo="body" closeOnEscape="false">
+  <p-header *ngIf="selectedNode && selectedNode.data">
+    <span *ngIf="selectedNode.data.id">Редагувати</span> 
+    <span *ngIf="!selectedNode.data.id">Додати</span> 
+    <span> статус</span>
+  </p-header>
+  
+  <div class="ui-g" *ngIf="selectedNode">
+    <form *ngIf="selectedNode" (ngSubmit)="onSubmit()" #modelForm="ngForm" style="width: 100%">
+
+      <div class="form-group">
+        <label for="name">Назва*</label>
+        <input type="text" class="form-control"  id="name" required  [(ngModel)]="selectedNode.data.name"  name="name"  #name="ngModel">
+      </div>
+
+
+      <div class="form-group">
+        <label for="_type">Тип*</label>
+        <p-dropdown #dd [inputId]="_type" [style]="{'width':'100%'}" [required]="true" name="_type" [options]="statusTypes" [(ngModel)]="selectedNode.data._type" placeholder="Оберіть тип"  #type="ngModel"></p-dropdown>
+      </div>
+
+      <div class="form-group" *ngIf="selectedNode.data._type === 2">
+          <p-dataList [value]="selectedNode.data.options" emptyMessage="Немає вибору для цього статусу">
+            <p-header>
+              <span>Варіанти вибору</span>
+            </p-header>
+             
+            <ng-template let-option pTemplate="listItem">
+                
+                    <div class="ui-g">
+                      <div class="ui-g-10">
+                        <input [(ngModel)]="option.value" [ngModelOptions]="{standalone: true}">
+                      </div>
+                      <div class="ui-g-2">
+                        <p-button icon="fa fa-fw fa-close" (onClick)="deleteOption(option)"></p-button>
+                      </div>
+                    </div>
+                
+            </ng-template>
+
+            <p-footer>
+                <p-button label="Додати новий" (onClick)="addNewOption($event)"></p-button>
+                <p-button label="Видалити всі" (onClick)="deleteAllOptions($event)"></p-button>
+            </p-footer>
+        </p-dataList>
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="!modelForm.form.valid || !selectedNode.data._type">Зберегти зміни</button>
+
+    </form>
+  </div>
+</p-dialog>

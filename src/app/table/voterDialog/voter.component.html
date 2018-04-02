@@ -1,0 +1,67 @@
+<p-dialog *ngIf="voter"
+				appendTo="body" 
+				[(visible)]="display"
+				[width]="700"
+        [contentStyle]="{'overflow':'scroll'}"
+        (onHide)="onHide(sSelect)">
+  <p-header>
+      <span>Виборець ID {{ voter.id }}</span>
+  </p-header>
+
+  <div class="ui-g">
+    <div class="ui-g-6">
+      
+        <div style="padding:1em">
+          <form (ngSubmit)="onSubmit()" #modelForm="ngForm" style="width: 100%;">
+            
+            <!-- Вибір дільниці -->
+            <div class="form-group">
+              <station-select 
+                [station]="voter.station"
+                (onStationChange)="loadAttributes($event)"
+                #sSelect></station-select>
+            </div>  
+
+            <ng-container *ngIf="statuses?.length > 0">
+              <div class="form-group" *ngFor="let status of statuses">
+                <!-- Число -->
+                <ng-container *ngIf="status.type === 1">
+                  <label for="{{ status.id }}">{{status.name}}</label> 
+                  <input type="number" name="{{status.id}}" class="form-control" [(ngModel)]="voter[status.id]">
+                </ng-container>
+
+                <!-- Рядок з вибором -->
+                <ng-container *ngIf="status.type === 2 && status.options.length > 0">
+                  <label for="{{ status.id }}">{{status.name}}</label> 
+                  <p-dropdown 
+                    [options]="status.options" 
+                    [style]="{'width':'100%'}"
+                    
+                    [autoDisplayFirst]="false"
+                    optionLabel="value"
+                    [ngModel] = "{value: voter[status.id]}"
+                    (ngModelChange)="voter[status.id] = $event.value"
+                    [ngModelOptions]="{standalone: true}"> 
+                  </p-dropdown>
+                </ng-container>
+
+                <!-- Рядок з вільним вмістом -->
+                <ng-container *ngIf="status.type === 2 && status.options.length === 0">
+                  <label for="{{ status.id }}">{{status.name}}</label> 
+                  <input type="text" name="{{status.id}}" class="form-control" [(ngModel)]="voter[status.id]">
+                </ng-container>
+
+              </div>
+            </ng-container>
+      
+            <button type="submit"  [disabled]="!modelForm.form.valid || !voter.station"  class="btn btn-success">Зберегти</button>
+
+          </form>
+        </div>
+      
+    </div>
+    <div class="ui-g-6">
+
+    </div>
+  </div>
+</p-dialog>

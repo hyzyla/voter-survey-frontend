@@ -1,0 +1,15 @@
+<p-tree [value]="territories" 
+        (onNodeExpand)="loadNode($event.node)" 
+        selectionMode="single" 
+        [(selection)]="selectedNode"
+        
+        draggableNodes="false" 
+        droppableNodes="true"
+        (onNodeDrop)="onNodeDrop($event)"
+        (onNodeContextMenuSelect)="makeContextMenu($event.node)"
+        [contextMenu]="cm">
+        </p-tree>
+
+   <!-- -->
+<p-contextMenu #cm appendTo="body" [model]="items"></p-contextMenu>
+

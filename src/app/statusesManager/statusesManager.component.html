@@ -1,0 +1,25 @@
+<p-dialog 
+      header="Керувати статусами" 
+      appendTo="body" 
+      [(visible)]="display" 
+      width=600 modal="true" 
+      closeOnEscape="false" 
+      autoAlign="true">
+  <div class="ui-g">
+      <div class="ui-g-6">
+        <div class="ui-g">
+          <status-statuses  class="fullsize-tree"></status-statuses>
+        </div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g">
+          <status-territories class="fullsize-tree"></status-territories>
+        </div>
+      </div>
+  </div>
+  <p-footer>
+    <button type="text" (click)="display=false" pButton label="Закрити"></button>
+  </p-footer>
+</p-dialog>
+
+<!-- <p-button label="Click" (onClick)="display=true"></p-button> -->

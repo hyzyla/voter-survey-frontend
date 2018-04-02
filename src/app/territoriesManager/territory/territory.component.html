@@ -1,0 +1,56 @@
+<p-tree [value]="territories" 
+        (onNodeExpand)="loadNode($event.node)" 
+        selectionMode="single" 
+        [(selection)]="selectedNode"
+        (onNodeContextMenuSelect)="makeContextMenu($event.node)"
+        [contextMenu]="cm" 
+        draggableNodes="true" 
+        droppableNodes="false">
+        </p-tree>
+<p-contextMenu #cm appendTo="body" [model]="items"></p-contextMenu>   
+
+
+<!-- форма редагування -->
+<p-dialog [(visible)]="displayEditForm" minWidth=100 modal="true" appendTo="body" closeOnEscape="false">
+    <p-header *ngIf="selectedNode && selectedNode.data">
+        <span *ngIf="selectedNode.data.id">Редагувати </span>
+        <span *ngIf="!selectedNode.data.id">Створити </span>
+        <span *ngIf="selectedNode.data.type === 'region'">регіон</span>
+        <span *ngIf="selectedNode.data.type === 'district'">район</span>
+        <span *ngIf="selectedNode.data.type === 'station'">дільницю</span>
+    </p-header>
+    
+    <div class="ui-g" *ngIf="selectedNode">
+    <form *ngIf="selectedNode" (ngSubmit)="onSubmit()" #modelForm="ngForm" style="width: 100%">
+
+        <div class="form-group" *ngIf="selectedNode.data.type === 'region' || selectedNode.data.type === 'district' ">
+          <label for="name">Назва*</label>
+          <input type="text" class="form-control"  id="name" required [(ngModel)]="selectedNode.data.name"  name="name" #name="ngModel">
+        </div>
+
+        <div class="form-group" *ngIf="selectedNode.data.type === 'district'">
+        <label for="city">Місто (якщо район міста)</label>
+        <input type="text" class="form-control" id="city" [(ngModel)]="selectedNode.data.city" name="city" #city="ngModel">
+        </div>
+
+        <div class="form-group" *ngIf="selectedNode.data.type == 'station'">
+        <label for="num">Номер відділення</label>
+        <input type="text" class="form-control" id="num" required [(ngModel)]="selectedNode.data.number" name="num" #num="ngModel">
+        </div>
+
+        <div class="form-group" *ngIf="selectedNode.data.type == 'station'">
+        <label for="description">Опис</label>
+        <input type="text" class="form-control" id="description" [(ngModel)]="selectedNode.data.description" name="description" #description="ngModel">
+        </div>
+
+        <div class="form-group" *ngIf="selectedNode.data.type == 'station'">
+        <label for="address">Адреса відділення</label>
+        <input type="text" class="form-control" id="address" [(ngModel)]="selectedNode.data.address" name="address" #address="ngModel">
+        </div>
+
+        <button type="submit" class="btn btn-success" [disabled]="!modelForm.form.valid">Зберегти зміни</button>
+
+    </form>
+    </div>
+</p-dialog>
+

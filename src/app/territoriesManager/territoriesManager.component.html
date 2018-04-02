@@ -1,0 +1,17 @@
+<p-dialog header="Керувати дільницями" appendTo="body" [(visible)]="display" width=600 modal="true" closeOnEscape="false" autoAlign="true">
+  <div class="ui-g">
+      <div class="ui-g-6">
+        <div class="ui-g">
+          <territory-territories class="fullsize-tree"></territory-territories>
+        </div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g">
+          <territory-constituencies class="fullsize-tree"></territory-constituencies>
+        </div>
+      </div>
+  </div>
+  <p-footer>
+    <button type="text" (click)="display=false" pButton icon="fa-external-link-square" label="Закрити"></button>
+  </p-footer>
+</p-dialog>

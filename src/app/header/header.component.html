@@ -1,0 +1,35 @@
+  <mat-toolbar color="primary" class="mat-elevation-z1">
+    <mat-toolbar-row>
+      <span>
+        <button mat-button (click)="displayStatusManager=true"><span>Статуси</span></button>
+        <app-statuses [(display)]="displayStatusManager" (displayChange)="onStatusesChanged()"></app-statuses>
+      </span>
+      <span>
+        <button mat-button (click)="displayTerritoryManager=true"><span>Дільниці</span></button>
+        <app-territories [(display)]="displayTerritoryManager"></app-territories>
+      </span>
+      <span>
+        <button mat-button (click)="displayAdminPanel()">Адмін панель</button>
+      </span>
+      <span>
+          <button mat-button [matMenuTriggerFor]="constituencyMenu" (click)="updateConstituencies()">
+            <span *ngIf="selectedConstrituency">{{ selectedConstrituency.pname }}<i class="material-icons md-24" style="vertical-align: middle">keyboard_arrow_down</i></span>
+          </button>
+          <mat-menu #constituencyMenu="matMenu">
+            <ng-container *ngFor="let c of constituencies">
+              <button mat-menu-item (click)="onSelectConsituency(c)">{{ c.pname }}</button>
+            </ng-container>
+          </mat-menu>
+      </span>
+
+      <span class="fill-remaining-space"></span>
+        <button mat-button [matMenuTriggerFor]="appMenu">
+          <span>{{ user.username }}</span>
+        </button>
+        <mat-menu #appMenu="matMenu">
+          <button mat-menu-item (click)="reloadApp()">Перезавантажити</button>
+          <button mat-menu-item [routerLink]="['/login']">Вийти</button>
+        </mat-menu>
+        
+    </mat-toolbar-row>
+  </mat-toolbar>

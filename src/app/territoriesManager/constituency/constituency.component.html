@@ -1,0 +1,45 @@
+<p-tree [value]="constituencies" 
+        (onNodeExpand)="loadNode($event.node)" 
+        selectionMode="single" 
+        [(selection)]="selectedNode" 
+        (onNodeContextMenuSelect)="makeContextMenu($event.node)" 
+        [contextMenu]="cm" 
+        draggableNodes="false" 
+        droppableNodes="true" 
+        (onNodeDrop)="onNodeDrop($event)">
+      </p-tree>
+<p-contextMenu #cm appendTo="body" [model]="items"></p-contextMenu>
+
+
+<!-- форма редагування -->
+<p-dialog [(visible)]="displayForm" modal="true" appendTo="body" closeOnEscape="false">
+  <p-header *ngIf="selectedNode && selectedNode.data">
+    <span *ngIf="selectedNode.data.id">Редагувати</span> 
+    <span *ngIf="!selectedNode.data.id">Додати</span> 
+    <span> округ</span>
+  </p-header>
+  
+  <div class="ui-g" *ngIf="selectedNode">
+    <form *ngIf="selectedNode" (ngSubmit)="onSubmit()" #modelForm="ngForm" style="width: 100%">
+
+      <div class="form-group">
+        <label for="name">Назва*</label>
+        <input type="text" class="form-control"  id="name" required  [(ngModel)]="selectedNode.data.name"  name="name"  #name="ngModel">
+      </div>
+
+
+      <div class="form-group">
+        <label for="description">Опис</label>
+        <input type="text" class="form-control"  id="description"  [(ngModel)]="selectedNode.data.description"  name="description"  #description="ngModel">
+      </div>
+
+      <div class="form-group">
+        <label for="year">Рік*</label>
+        <input type="number" class="form-control"  id="year" required  [(ngModel)]="selectedNode.data.year"  name="year"  #year="ngModel">
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="!modelForm.form.valid">Зберегти зміни</button>
+
+    </form>
+  </div>
+</p-dialog>
