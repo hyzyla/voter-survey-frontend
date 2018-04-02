@@ -162,23 +162,26 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   saveRecord() {
-    console.log(this.rowData);
-    console.log(this.fromRowToVoter(this.rowData));
     const records = [...this.records];
     if (this.newRecord) {
       this.voterService.create(this.fromRowToVoter(this.rowData))
-        .subscribe(r => records.push(this.fromVoterToRow(r)));
-        this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно створено'})
+        .subscribe(r => { 
+          records.push(this.fromVoterToRow(r));
+          this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно створено'})
+          this.rowData = null;
+        });
+        
     } else {
       this.voterService.update(this.fromRowToVoter(this.rowData))
         .subscribe(r => {
+          this.rowData = null;
           records[this.records.indexOf(this.selectedRecord)] = this.fromVoterToRow(r);
           this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно збережено'});
         });
     }
   
     this.records = records;
-    this.rowData = null;
+    
     this.displayDialog = false;
   }
 
