@@ -168,13 +168,13 @@ export class TableComponent implements OnInit, AfterViewInit {
         .subscribe(r => { 
           records.push(this.fromVoterToRow(r));
           this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно створено'})
-          this.rowData = undefined;
+          this.rowData = null;
         });
         
     } else {
       this.voterService.update(this.fromRowToVoter(this.rowData))
         .subscribe(r => {
-          this.rowData = undefined;
+          this.rowData = null;
           records[this.records.indexOf(this.selectedRecord)] = this.fromVoterToRow(r);
           this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно збережено'});
         });
