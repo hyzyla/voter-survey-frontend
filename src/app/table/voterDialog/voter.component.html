@@ -1,7 +1,8 @@
 <p-dialog *ngIf="voter"
 				appendTo="body" 
 				[(visible)]="display"
-				[width]="700"
+        [width]="700"
+        [autoAlign]="false"
         [contentStyle]="{'overflow':'scroll'}"
         (onHide)="onHide(sSelect)">
   <p-header>

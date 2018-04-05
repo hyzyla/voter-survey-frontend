@@ -191,7 +191,7 @@ export function createLeafNode(r) {
 
 export function createStationNode(r) {
 	return {
-		label: r.number,
+		label: r.pname,
 		data: r,
 		draggable: true,
 		droppable: false,

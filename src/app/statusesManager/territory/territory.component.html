@@ -1,15 +1,20 @@
-<p-tree [value]="territories" 
-        (onNodeExpand)="loadNode($event.node)" 
-        selectionMode="single" 
-        [(selection)]="selectedNode"
-        
-        draggableNodes="false" 
-        droppableNodes="true"
-        (onNodeDrop)="onNodeDrop($event)"
-        (onNodeContextMenuSelect)="makeContextMenu($event.node)"
-        [contextMenu]="cm">
-        </p-tree>
+<p-tree #tree [value]="territories" 
+  (onNodeExpand)="loadNode($event.node)" 
+  selectionMode="single" 
+  [(selection)]="selectedNode"
+  draggableNodes="false" 
+  droppableNodes="true"
+  (onNodeDrop)="onNodeDrop($event)"
+  (onNodeContextMenuSelect)="makeContextMenu($event.node)"
+  [contextMenu]="cm">
 
-   <!-- -->
+    <ng-template let-node  pTemplate="default">
+      <span style="width:100%" 
+        (mouseenter)="onMouseEnter(node, cm, $event)" 
+        (mouseleave)="onMouseLeave(node, cm, $event)">{{  node.label }}</span>
+    </ng-template>
+  </p-tree>
+
+<!-- -->
 <p-contextMenu #cm appendTo="body" [model]="items"></p-contextMenu>
 

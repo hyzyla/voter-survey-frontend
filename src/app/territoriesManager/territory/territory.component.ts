@@ -10,10 +10,11 @@ import { MessageService } from 'primeng/components/common/messageservice';
   templateUrl: './territory.component.html',
 })
 export class TerittoryComponent {
-    displayEditForm = false;
-    territories: TreeNode[];
-    selectedNode: TreeNode;
-    prevSelectedNode: TreeNode;
+  waitingToShow: NodeJS.Timer;
+  displayEditForm = false;
+  territories: TreeNode[];
+  selectedNode: TreeNode;
+  prevSelectedNode: TreeNode;
 
   makeContextMenu(node){
     let edit;
@@ -84,6 +85,19 @@ export class TerittoryComponent {
       }
     ];
     this.loadNode(this.territories[0]);
+  }
+
+  onMouseEnter(node, cm, event) {
+    cm.hide(event);
+    this.selectedNode = node;
+    this.waitingToShow = setTimeout(_ => {
+      this.makeContextMenu(node);
+      cm.show(event);
+    }, 500);
+  }
+
+  onMouseLeave(node, cm, event) {
+    clearInterval(this.waitingToShow);
   }
 
   onSubmit() {

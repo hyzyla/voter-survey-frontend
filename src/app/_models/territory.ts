@@ -60,8 +60,8 @@ export class Station {
         return 'station';
     }
 
-    get name() {
-        return this.number;
+    get pname() {
+        return `${this.number} (${this.address})`;
     }
 }
 

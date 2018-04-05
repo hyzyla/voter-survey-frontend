@@ -16,7 +16,9 @@
   
   <ng-template pTemplate="colgroup" let-columns>
     <colgroup>
+      <col>
       <col *ngFor="let col of selectedColumns" >
+      <col>
     </colgroup>
   </ng-template>
 
@@ -24,7 +26,7 @@
     
     <!-- column header -->
     <tr>
-      <th style="width: 2.25em"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+      <th style="width: 2.25em" pResizableColumn><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
       <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn><p-sortIcon [field]="col.field"></p-sortIcon>{{col.header}}</th>
       <th pResizableColumn>
         <div style="text-align:left">

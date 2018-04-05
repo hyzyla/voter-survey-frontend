@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 export class ConstituencyComponent implements OnInit {
   
 
+  waitingToShow: NodeJS.Timer;
   showDialog = false;
   displayForm = false;
   constituencies: TreeNode[];
@@ -37,6 +38,20 @@ export class ConstituencyComponent implements OnInit {
     ];
     this.loadNode(this.constituencies[0]);
   }
+
+  onMouseEnter(node, cm, event) {
+    cm.hide(event);
+    this.selectedNode = node;
+    this.waitingToShow = setTimeout(_ => {
+      this.makeContextMenu(node);
+      cm.show(event);
+    }, 500);
+  }
+
+  onMouseLeave(node, cm, event) {
+    clearInterval(this.waitingToShow);
+  }
+
 
   onSubmit() {
     const node = this.selectedNode;

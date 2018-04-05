@@ -6,6 +6,7 @@ import {Station, Region, District, Status } from '../../_models';
 import { StatusService } from '../../_services/status.service';
 import { SelectItem } from 'primeng/components/common/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'status-territories',
@@ -15,6 +16,7 @@ export class TerritoryComponent {
   territories: TreeNode[];
   selectedNode: TreeNode;
   items: MenuItem[];
+  waitingToShow;
   nodeDropped = new EventEmitter()
 
   constructor(private territoryService: TerritoryService, 
@@ -36,10 +38,23 @@ export class TerritoryComponent {
     ];
     this.loadNode(this.territories[0]);
   }
-  
+
+
+  onMouseEnter(node, cm, event) {
+    cm.hide(event);
+    this.selectedNode = node;
+    this.waitingToShow = setTimeout(_ => {
+      this.makeContextMenu(node);
+      cm.show(event);
+    }, 500);
+  }
+
+  onMouseLeave(node, cm, event) {
+    clearInterval(this.waitingToShow);
+  }
+
 
   makeContextMenu(node) {
-    console.log(node);
     if (node.data.type === "country" || node.data.type === "static") {
       this.items = [];
     } else if (node.data.type === "region") {
@@ -172,7 +187,7 @@ export class TerritoryComponent {
             .map(item => {
               const station = new Station(item);
               return {
-                label: station.number,
+                label: station.pname,
                 data: station,
                 draggable: false,
                 droppable: false,

@@ -6,6 +6,11 @@
         [contextMenu]="cm" 
         draggableNodes="true" 
         droppableNodes="false">
+        <ng-template let-node  pTemplate="default">
+            <span style="width:100%" 
+              (mouseenter)="onMouseEnter(node, cm, $event)" 
+              (mouseleave)="onMouseLeave(node, cm, $event)">{{  node.label }}</span>
+          </ng-template>
         </p-tree>
 <p-contextMenu #cm appendTo="body" [model]="items"></p-contextMenu>   
 

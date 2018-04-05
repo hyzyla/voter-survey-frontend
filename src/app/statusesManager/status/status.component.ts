@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 @Component({
   selector: 'status-statuses',
   templateUrl: './status.component.html',
+  styles: ['.my-tree .ui-treenode-label {  background: red  }'],
 })
 export class StatusComponent implements OnInit {
   
@@ -19,6 +20,9 @@ export class StatusComponent implements OnInit {
   statuses: TreeNode[];
   selectedNode: TreeNode;
   prevSelectedNode: TreeNode;
+  showContextMenu = false;
+  waitingToShow;
+
 
   public items: MenuItem[];
 
@@ -46,6 +50,19 @@ export class StatusComponent implements OnInit {
       }
     ];
     this.loadNode(this.statuses[0]);
+  }
+
+  onMouseEnter(node, cm, event) {
+    cm.hide(event);
+    this.selectedNode = node;
+    this.waitingToShow = setTimeout(_ => {
+      this.makeContextMenu(node);
+      cm.show(event);
+    }, 500);
+  }
+
+  onMouseLeave(node, cm, event) {
+    clearInterval(this.waitingToShow);
   }
 
   onSubmit() {

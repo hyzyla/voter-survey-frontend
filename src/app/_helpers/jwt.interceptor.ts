@@ -9,6 +9,28 @@ import { environment } from '../../environments/environment';
 let baseUrl = environment.urlApi;
 console.log(environment);
 
+function get_error_msg(error) {
+  if (! error.status) {
+    return JSON.stringify(error);
+  }
+
+  if (error.status >= 500 && error.status < 600) {
+    return JSON.stringify(error.message);
+  }
+
+  if (error.status >= 400 && error.status < 500) {
+    if (error.error && error.error.detail) { 
+      if (error.error.detail instanceof Array) {
+        return error.error.detail.join(", ")
+      }
+      return error.error.detail;
+    } else if (error.error) {
+      return error.error;
+    }
+  }
+  return ""
+}
+
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
@@ -29,15 +51,16 @@ export class JwtInterceptor implements HttpInterceptor {
       request = request.clone({url: `${baseUrl}${request.url}`});
     }
 
-    return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
-      if (err instanceof HttpErrorResponse) {
+    return next.handle(request).do((event: HttpEvent<any>) => {}, (error: any) => {
+      if (error instanceof HttpErrorResponse) {
        this.alertServcie.add({
           severity: "error",
           summary: "Помилка ",
-          detail:  err.message || err.error.detail,
+          detail:  get_error_msg(error),
         });
-       console.log(err);
       }
-     });;
+      console.log(error);;
+     });
+     
   }
 }

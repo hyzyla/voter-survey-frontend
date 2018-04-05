@@ -65,6 +65,12 @@ export class TableComponent implements OnInit, AfterViewInit {
         header: "Дільниця",
         type: 2,
         options: []
+      },
+      {
+        field: "station_address",
+        header: "Адреса дільниці",
+        type: 2,
+        options: []
       }
     ])
 
@@ -168,13 +174,13 @@ export class TableComponent implements OnInit, AfterViewInit {
         .subscribe(r => { 
           records.push(this.fromVoterToRow(r));
           this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно створено'})
-          this.rowData = null;
+          this.rowData = undefined;
         });
         
     } else {
       this.voterService.update(this.fromRowToVoter(this.rowData))
         .subscribe(r => {
-          this.rowData = null;
+          this.rowData = undefined;
           records[this.records.indexOf(this.selectedRecord)] = this.fromVoterToRow(r);
           this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно збережено'});
         });
@@ -194,7 +200,7 @@ export class TableComponent implements OnInit, AfterViewInit {
       this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно видалено'})
     );
     this.records = this.records.filter((val, i) => i !== index);
-    this.selectedRecord = null;
+    this.selectedRecord = undefined;
     this.displayDialog = false;
   }
 
@@ -209,6 +215,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     let attrib = voter.attrib;
     attrib['id'] = voter.id;
     attrib['station_number'] = voter.station.number;
+    attrib['station_address'] = voter.station.address;
     attrib['station'] = voter.station;
     return attrib;
   }
@@ -219,6 +226,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     let station = row.station;
     delete row['station']
     delete row['station_number']
+    delete row['station_address']
     delete row['id']
 
     let voter: Voter = <Voter>{

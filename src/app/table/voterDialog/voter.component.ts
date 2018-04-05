@@ -53,8 +53,8 @@ export class VoterDialog implements AfterViewInit {
   }
 
   onHide(stationSelect) {
-    this._voter = null;
-    this.statuses = null;
+    this._voter = undefined;
+    this.statuses = undefined;
     stationSelect.clear();
   }
 
