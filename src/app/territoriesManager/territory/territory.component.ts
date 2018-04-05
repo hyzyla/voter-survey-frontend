@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
   templateUrl: './territory.component.html',
 })
 export class TerittoryComponent {
-  waitingToShow: NodeJS.Timer;
+  waitingToShow;
   displayEditForm = false;
   territories: TreeNode[];
   selectedNode: TreeNode;

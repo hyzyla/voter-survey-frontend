@@ -12,7 +12,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 export class ConstituencyComponent implements OnInit {
   
 
-  waitingToShow: NodeJS.Timer;
+  waitingToShow;
   showDialog = false;
   displayForm = false;
   constituencies: TreeNode[];
