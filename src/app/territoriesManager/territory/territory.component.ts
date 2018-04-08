@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TreeNode } from 'primeng/components/common/treenode';
 import { TerritoryService, createLeafNode, createStationNode } from '../../_services/territory.service';
 import { MenuItem } from 'primeng/components/common/menuitem';
@@ -12,6 +12,12 @@ import { MessageService } from 'primeng/components/common/messageservice';
 export class TerittoryComponent {
   waitingToShow;
   displayEditForm = false;
+  displayAddRecrordForm = false;
+  numberOfVoters;
+  addVoters;
+
+  @Output() votersAdded: EventEmitter<any> = new EventEmitter();
+
   territories: TreeNode[];
   selectedNode: TreeNode;
   prevSelectedNode: TreeNode;
@@ -19,6 +25,7 @@ export class TerittoryComponent {
   makeContextMenu(node){
     let edit;
     let add;
+    let fill = false;
     if (node.data.type === "country") {
       add = "область";
     } else if (node.data.type === 'region') {
@@ -29,6 +36,7 @@ export class TerittoryComponent {
       edit = "район";
     } else {
       edit = "дільницю"
+      fill = true;
     }
     this.items = [];
     if (edit) {
@@ -47,7 +55,33 @@ export class TerittoryComponent {
         command: (event: Event) => this.createNode(),
       }); 
     }
+    if (fill) {
+      this.items.push({
+        label: "Додати пусті записи виборців",
+        command: (event: Event) => this.createEmptyRecords(),
+      })
+    }
   
+  }
+
+  onSubmitAddRecords() {
+    this.displayAddRecrordForm = false;
+    if (!this.selectedNode || !this.selectedNode.data || !this.addVoters) return;
+    this.territoryService.station
+      .createEmptyRecords(this.selectedNode.data, this.addVoters)
+      .subscribe(_ => {
+        console.log("emitingVoterchanges...");
+        this.votersAdded.emit(true);
+      });
+  }
+
+  createEmptyRecords() {
+    const node = this.selectedNode;
+    if (!node || !node.data) return;
+    this.displayAddRecrordForm = true;
+    this.addVoters = undefined;
+    this.territoryService.station.getVoterNumber(node.data)
+      .subscribe(number => this.numberOfVoters = number)
   }
 
   // Remove in the future

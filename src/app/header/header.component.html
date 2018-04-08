@@ -6,7 +6,7 @@
       </span>
       <span>
         <button mat-button (click)="displayTerritoryManager=true"><span>Дільниці</span></button>
-        <app-territories [(display)]="displayTerritoryManager"></app-territories>
+        <app-territories (voterAddded)="voterAddded.emit($event)" [(display)]="displayTerritoryManager"></app-territories>
       </span>
       <span>
         <button mat-button (click)="displayAdminPanel()">Адмін панель</button>

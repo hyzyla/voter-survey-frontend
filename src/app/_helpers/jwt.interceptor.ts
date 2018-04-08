@@ -23,9 +23,14 @@ function get_error_msg(error) {
       if (error.error.detail instanceof Array) {
         return error.error.detail.join(", ")
       }
-      return error.error.detail;
+      return JSON.stringify(error.error.detail);
+    } else if (error.error && error.error.attrib) { 
+        if (error.error.attrib instanceof Array) {
+          return error.error.attrib.join(", ")
+        }
+        return JSON.stringify(error.error.attrib);
     } else if (error.error) {
-      return error.error;
+      return JSON.stringify(error.error);
     }
   }
   return ""

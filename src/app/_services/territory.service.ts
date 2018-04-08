@@ -133,6 +133,14 @@ export class StationService {
 	deleteStatus(station: Station, status: Status) {
 		return this.http.put(`${this.url}${station.id}/delete-status/`, status);
 	}
+
+	getVoterNumber(station: Station) {
+		return this.http.get(`${this.url}${station.id}/voter-number/`);
+	}
+
+	createEmptyRecords(station: Station, amount: number) {
+		return this.http.post(`${this.url}${station.id}/create-records/`, amount);
+	}
 }
 
 export class ConstituencyService {
@@ -163,8 +171,16 @@ export class ConstituencyService {
 
 	deleteStation(constituency: Constituency, station: Station) {
 		return this.http.put(`${this.url}${constituency.id}/delete-station/`, station);
-  }
-  
+	}
+	 
+	addRegion(constituency: Constituency, region: Region): any {
+		return this.http.put(`${this.url}${constituency.id}/add-region/`, region);
+	}
+
+	addDistrict(constituency: Constituency, district: District): any {
+		return this.http.put(`${this.url}${constituency.id}/add-district/`, district);
+	}
+
 	addStation(constituency: Constituency, station: Station): any {
 		return this.http.put(`${this.url}${constituency.id}/add-station/`, station);
 	}
@@ -185,7 +201,7 @@ export function createLeafNode(r) {
 		data: r,
 		leaf: false,
 		droppable: true,
-		draggable: false,
+		draggable: true,
 	};
 }
 
@@ -194,7 +210,7 @@ export function createStationNode(r) {
 		label: r.pname,
 		data: r,
 		draggable: true,
-		droppable: false,
+		droppable: true,
 	};
 }
 

@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
   constituencies: Constituency[];
   @Output() constituencyChanged = new EventEmitter();
   @Output() statusChanged = new EventEmitter();
+  @Output() voterAddded = new EventEmitter();
 
   constructor(private territoryService: TerritoryService) {}
 

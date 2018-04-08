@@ -1,8 +1,8 @@
-<p-dialog header="Керувати дільницями" appendTo="body" [(visible)]="display" width=600 modal="true" closeOnEscape="false" autoAlign="true">
+<p-dialog header="Керувати дільницями" appendTo="body" [(visible)]="display" width=1000 modal="true" closeOnEscape="false" autoAlign="true">
   <div class="ui-g">
       <div class="ui-g-6">
         <div class="ui-g">
-          <territory-territories class="fullsize-tree"></territory-territories>
+          <territory-territories (votersAdded)="voterAddded.emit($event)" class="fullsize-tree"></territory-territories>
         </div>
       </div>
       <div class="ui-g-6">

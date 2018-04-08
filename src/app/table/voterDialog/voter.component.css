@@ -1,9 +1,3 @@
-p-dialog .ui-dialog {
-  overflow: scroll;
-  max-height: 70%;
+::ng-deep div.ui-dialog-content.ui-widget-content {
+    height: 500px;
 }
-
-.ui-dialog-content {
-    overflow: scroll;
-}
-

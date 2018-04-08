@@ -17,7 +17,7 @@
 
 
 <!-- форма редагування -->
-<p-dialog [(visible)]="displayForm" modal="true" appendTo="body" closeOnEscape="false">
+<p-dialog [(visible)]="displayForm" modal="true" appendTo="body" width=800  closeOnEscape="false">
   <p-header *ngIf="selectedNode && selectedNode.data">
     <span *ngIf="selectedNode.data.id">Редагувати</span> 
     <span *ngIf="!selectedNode.data.id">Додати</span> 
@@ -47,10 +47,10 @@
             <ng-template let-option pTemplate="listItem">
                 
                     <div class="ui-g">
-                      <div class="ui-g-10">
-                        <input [(ngModel)]="option.value" [ngModelOptions]="{standalone: true}">
+                      <div class="ui-g-11">
+                        <input [(ngModel)]="option.value" style="width: 100%" [ngModelOptions]="{standalone: true}">
                       </div>
-                      <div class="ui-g-2">
+                      <div class="ui-g-1">
                         <p-button icon="fa fa-fw fa-close" (onClick)="deleteOption(option)"></p-button>
                       </div>
                     </div>

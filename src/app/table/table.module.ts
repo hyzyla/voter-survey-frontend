@@ -15,7 +15,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SliderModule } from 'primeng/slider';
 import { SpinnerModule } from 'primeng/spinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-
+import { TooltipModule } from 'primeng/tooltip';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
     declarations: [
@@ -37,6 +38,8 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
       SliderModule,
       SpinnerModule,
       ScrollPanelModule,
+      TooltipModule,
+      CheckboxModule
     ],
     exports: [
       TableComponent,

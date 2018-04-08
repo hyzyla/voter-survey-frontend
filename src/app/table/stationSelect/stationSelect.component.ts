@@ -33,28 +33,49 @@ export class StationSelectComponent implements OnInit  {
   set station(value) {
     value = value as Station;
     this._station = value;
-    this.onStationChange.emit(value);
+    this.initStation()
   }
 
   ngOnInit() {
-    this.territoryService.region.getAll()
-      .subscribe((regions: Region[]) => {
-        this.regions = regions;
-      });
+    this.initStation()
+  }
+
+  initStation() {
+    this.loadRegions();
     if (this.station) {
       this.territoryService.station.getDistrict(this.station)
         .subscribe((district: District) => {
           this.territoryService.district.getRegion(district) 
             .subscribe((region: Region) => {
+
+              this.loadRegions();
               this.selectedRegion = region;
-              this.onChange(region, 'region');
+
+              this.loadDistricts(region);
               this.selectedDistrict = district;
-              this.onChange(district, 'district');
+
+              this.loadStations(district);
               this.selectedStation = this.station;
-              this.onChange(this.station, 'station');
+
+              this.onStationChange.emit(this.station);
             });
         });
     }
+  }
+
+  loadRegions() {
+    this.territoryService.region.getAll()
+    .subscribe((regions: Region[]) => this.regions = regions);
+  }
+
+  loadDistricts(region: Region) {
+    this.territoryService.district.getByRegion(region)
+      .subscribe((districts: District[]) => this.districts = districts);
+  }
+
+  loadStations(district: District) {
+    this.territoryService.station.getByDistrict(district)
+    .subscribe((stations: Station[]) => this.stations = stations);
   }
 
   clear() {
@@ -63,30 +84,22 @@ export class StationSelectComponent implements OnInit  {
     this.selectedStation = false;
     this.districts = [];
     this.stations = [];
-
   }
 
   onChange(value, type) {
     if (type === 'region') {
-      this.territoryService.district.getByRegion(new Region(value))
-        .subscribe((districts: District[]) => {
-          this.districts = districts;
-        });
-      delete this.selectedDistrict;
+      this.loadDistricts(new Region(value));
       this.stations = [];
+      delete this.selectedDistrict;
       delete this.selectedStation;
-
+      this.onStationChange.emit(this.selectedStation);
     } else if (type === 'district') {
-      this.territoryService.station.getByDistrict(value)
-        .subscribe((stations: Station[]) => {
-          this.stations = stations;
-        });
+      this.loadStations(new District(value));
       delete this.selectedStation;
     } else {
-      this.station = value;
-      return;
+      this._station = value;
     }
-    
+
     this.onStationChange.emit(this.selectedStation);
   }
 

@@ -1,18 +1,17 @@
 
 <p-table #dt *ngIf="reinit" 
   [columns]="selectedColumns" 
-  [value]="records" 
-  selectionMode="single"
+  [value]="records"
+  [metaKeySelection]="true"  
   datakey="ctrl" 
   [(selection)]="selectedRecord" 
+  (onRowSelect)="showDialogToEdit($event)"
   [resizableColumns]="true"
   [scrollable]="true"
   [scrollHeight]="tableHeight"
+  selectionMode="multiple"
   [autoLayout]="true"
-  
   sortMode="single">
-  <!-- [(contextMenuSelection)]="selectedRecord"
-  [contextMenu]="cm" -->
   
   <ng-template pTemplate="colgroup" let-columns>
     <colgroup>
@@ -92,10 +91,15 @@
   </ng-template>
   
   <!-- records -->
-  <ng-template pTemplate="body" let-rowData let-columns="columns">
-    <tr [pSelectableRow]="rowData">
-      <td style="width: 2.25em"></td>
-      <td *ngFor="let col of columns" class="ui-resizable-column">{{rowData[col.field]}}</td>
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+      <td style="width: 2.25em">
+      </td>
+      <td *ngFor="let col of columns" 
+        class="ui-resizable-column" 
+        [pTooltip]="rowData[col.field]" 
+        tooltipPosition="top" 
+        [showDelay]="1000">{{rowData[col.field]}}</td>
       <td></td>
     </tr>
   </ng-template>  
@@ -112,6 +116,8 @@
   </ng-template>
 
 </p-table>  
-
-<!-- <p-contextMenu #cm [model]="contextMenu" appendTo="body"></p-contextMenu> -->
-<voter-dialog [(display)]="displayDialog" [(voter)]="rowData" (onFormSubmit)="saveRecord()"></voter-dialog>
+<voter-dialog
+  [(display)]="displayDialog" 
+  [voter]="recordData" 
+  (onFormSubmit)="saveRecord($event)">
+</voter-dialog>

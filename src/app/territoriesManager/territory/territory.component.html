@@ -16,7 +16,7 @@
 
 
 <!-- форма редагування -->
-<p-dialog [(visible)]="displayEditForm" minWidth=100 modal="true" appendTo="body" closeOnEscape="false">
+<p-dialog [(visible)]="displayEditForm" minWidth=100 width=800 modal="true" appendTo="body" closeOnEscape="false">
     <p-header *ngIf="selectedNode && selectedNode.data">
         <span *ngIf="selectedNode.data.id">Редагувати </span>
         <span *ngIf="!selectedNode.data.id">Створити </span>
@@ -56,6 +56,31 @@
         <button type="submit" class="btn btn-success" [disabled]="!modelForm.form.valid">Зберегти зміни</button>
 
     </form>
+    </div>
+</p-dialog>
+
+
+<p-dialog *ngIf="selectedNode && selectedNode.data" 
+            [(visible)]="displayAddRecrordForm"
+            [modal]="true"
+            width=600
+            appendTo="body" 
+            closeOnEscape="false">
+    <p-header><span>Додати записи виборців</span></p-header>
+    <div class="ui-g">
+        <div class="ui-g-2"><b>Дільниця:</b></div>
+        <div class="ui-g-10">{{ selectedNode.data.pname }}</div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-2"><b>Записів:</b></div>
+        <div class="ui-g-10">{{ numberOfVoters }} <ng-container *ngIf="addVoters"> + {{ addVoters }}</ng-container></div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-2"><b>Додати:</b></div>
+        <div class="ui-g-5"><p-spinner [(ngModel)]="addVoters" [min]="0"></p-spinner></div>
+        <div class="ui-g-5 ui-dialog-buttonpane ui-helper-clearfix">
+            <p-button label="Click" (onClick)="onSubmitAddRecords()"></p-button>
+        </div>
     </div>
 </p-dialog>
 

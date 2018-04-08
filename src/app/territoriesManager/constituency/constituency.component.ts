@@ -85,11 +85,18 @@ export class ConstituencyComponent implements OnInit {
 
   onNodeDrop(event) {
     let constituency = event.dropNode.data;
-    let station = event.dragNode.data; 
-    this.territoryService.constituency.addStation(constituency, station)
-      .subscribe(_ => {
-        this.messageService.add({severity:'success', summary:'Успіх', detail:'Дільницю додану до округу'});
-      });
+    let data = event.dragNode.data;
+    let service;
+    if (data.type === 'region') {
+      service = this.territoryService.constituency.addRegion(constituency, data);
+    } else if (data.type === 'district') {
+      service = this.territoryService.constituency.addDistrict(constituency, data);
+    } else if (data.type === 'station') {
+      service = this.territoryService.constituency.addStation(constituency, data);
+    } else return;
+    service.subscribe(_ => {
+      this.messageService.add({severity:'success', summary:'Успіх', detail:'Дільницю додану до округу'});
+    });
   }
 
 

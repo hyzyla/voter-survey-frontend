@@ -11,6 +11,7 @@ import { SharedModule } from 'primeng/components/common/shared';
 import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { SpinnerModule } from 'primeng/spinner';
 
 import { ConstituencyComponent } from './constituency/constituency.component';
 import { TerittoryComponent } from './territory/territory.component';
@@ -29,7 +30,8 @@ export class TerritoryManagerComponent {
   _display: boolean;
   
   @Output() displayChange = new EventEmitter();
-  
+  @Output() voterAddded: EventEmitter<any> = new EventEmitter();
+
   @Input() get display() {
     return this._display;
   }
@@ -38,6 +40,7 @@ export class TerritoryManagerComponent {
     this._display = value;
     this.displayChange.emit(value);
   }
+
 }
 
 
@@ -57,10 +60,11 @@ UITreeNode.prototype.onDropNode = function (event) {
           var dragNodeIndex = this.tree.dragNodeIndex;
           this.node.expanded = true;
           //this.tree.dragNodeSubNodes.splice(dragNodeIndex, 1);
-          if (this.node.children)
-            this.node.children.push(dragNode);
-          else
-            this.node.children = [dragNode];
+          // if (this.node.children)
+          //   this.node.children.push(dragNode);
+          // else
+          //   this.node.children = [dragNode];
+          this.node.expanded = false;
 
           this.tree.dragDropService.stopDrag({
             node: dragNode,
@@ -97,6 +101,7 @@ UITreeNode.prototype.onDropNode = function (event) {
     CommonModule,
     BrowserModule,
     FormsModule,
+    SpinnerModule,
   ],
   providers: [
     TerritoryService,

@@ -10,50 +10,40 @@ import { SelectItem } from 'primeng/api';
   templateUrl: './voter.component.html',
   styleUrls: ['./voter.component.css'],
 })
-export class VoterDialog implements AfterViewInit {
+export class VoterDialog {
   
   _display: boolean;
-  _voter: any; 
   statuses: Status[] = [];
 
   @Output() displayChange = new EventEmitter();
-  @Output() voterChange = new EventEmitter();
-  @Output() onFormSubmit = new EventEmitter();
-
   @Input() get display() { return this._display; }
-  @Input() get voter() { return this._voter; }
+
+  @Output() onFormSubmit = new EventEmitter();
+  @Input() voter;
 
   constructor(private territoryService: TerritoryService,
               private statusService: StatusService,
               private voterService: VoterService) { }
-
-  
-  ngAfterViewInit() {
-    console.log("DONE")
-  }
 
   set display(value: boolean) {
     this._display = value;
     this.displayChange.emit(value);
   }
 
-  set voter(value) {
-    this._voter = value;
-    this.voterChange.emit(value);
-  }
-
   onSubmit() {
     let value;
+    let record = {};
     for (let key in this.voter) {
       value = this.voter[key];
-      this.voter[key] = value.value === undefined ? value : value.value;
+      if (!value) continue;
+      record[key] = value.value === undefined ? value : value.value;
     }
-    this.onFormSubmit.emit();
+    this.onFormSubmit.emit(record);
     this.display = false;
   }
 
   onHide(stationSelect) {
-    this._voter = undefined;
+    this.voter = undefined;
     this.statuses = undefined;
     stationSelect.clear();
   }

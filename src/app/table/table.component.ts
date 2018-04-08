@@ -31,7 +31,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   records: any[];
   cols: any[];
   newRecord: boolean;
-  rowData: any;
+  recordData: any;
   displayDialog: boolean = false;
   selectedRecord: any[];
   contextMenu: MenuItem[]
@@ -83,7 +83,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.tableHeight = (window.innerHeight - 173) + 'px';
+    this.tableHeight = (window.innerHeight - 182) + 'px';
     this.reinit = true;
     this.contextMenu = [
       { label: 'Видалити', command: (event) => this.deleteRecord() },
@@ -105,6 +105,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   loadData(constituency: Constituency | undefined) {
+    
     this.records = [];
     if (constituency && constituency.id) {      
       this.territoryService.constituency.getVoters(constituency)
@@ -139,7 +140,8 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.appendColumns(true);
   }
 
-  printValue(){
+  printValue(a, b, c, d){
+    console.log(a,b,c,d);
     this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
   }
 
@@ -155,7 +157,7 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   showDialogToAdd() {
     this.newRecord = true;
-    this.rowData = {};
+    this.recordData = {};
     this.displayDialog = true;
   }
 
@@ -167,47 +169,57 @@ export class TableComponent implements OnInit, AfterViewInit {
     }
   }
 
-  saveRecord() {
+  saveRecord(event) {
     const records = [...this.records];
     if (this.newRecord) {
-      this.voterService.create(this.fromRowToVoter(this.rowData))
+      this.voterService.create(this.fromRowToVoter(event))
         .subscribe(r => { 
           records.push(this.fromVoterToRow(r));
           this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно створено'})
-          this.rowData = undefined;
+          this.recordData = undefined;
         });
         
     } else {
-      this.voterService.update(this.fromRowToVoter(this.rowData))
+      this.voterService.update(this.fromRowToVoter(event))
         .subscribe(r => {
-          this.rowData = undefined;
-          records[this.records.indexOf(this.selectedRecord)] = this.fromVoterToRow(r);
+          this.recordData = undefined;
+          records[this.records.indexOf(this.selectedRecord[0])] = this.fromVoterToRow(r);
           this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно збережено'});
         });
     }
   
     this.records = records;
-    
     this.displayDialog = false;
   }
-
 
   deleteRecord() {
-    if (!this.selectedRecord || this.selectedRecord instanceof Array) return;
-
-    const index = this.records.indexOf(this.selectedRecord);
-    this.voterService.delete(this.fromRowToVoter(this.selectedRecord)).subscribe(_ =>
-      this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно видалено'})
-    );
-    this.records = this.records.filter((val, i) => i !== index);
-    this.selectedRecord = undefined;
+    if (!this.selectedRecord) return;
+    if (!(this.selectedRecord instanceof Array)) {
+      this.selectedRecord = [this.selectedRecord]
+    }
+    this.selectedRecord.forEach(record => {
+      const index = this.records.indexOf(record);
+      this.voterService.delete(this.fromRowToVoter(record))
+        .subscribe(_ =>
+          this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно видалено'})
+        );
+      this.records = this.records.filter((val, i) => i !== index);
+    });
+    this.selectedRecord = [];
     this.displayDialog = false;
   }
 
-  showDialogToEdit() {
-    if (!this.selectedRecord || this.selectedRecord instanceof Array) return;
+  showDialogToEdit(event) {
+    if (!this.selectedRecord || (event && event.originalEvent && event.originalEvent.ctrlKey)) return;
+    if (!(this.selectedRecord instanceof Array)) {
+      this.selectedRecord = [this.selectedRecord]
+    }
+
+    if (this.selectedRecord instanceof Array && this.selectedRecord.length === 1) {
+      this.recordData = this.cloneRecord(this.selectedRecord[0]);
+    } else return;
+
     this.newRecord = false;
-    this.rowData = this.cloneRecord(this.selectedRecord);
     this.displayDialog = true;
   }
 
