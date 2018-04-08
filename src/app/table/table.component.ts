@@ -83,7 +83,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.tableHeight = (window.innerHeight - 182) + 'px';
+    this.tableHeight = (window.innerHeight - 186) + 'px';
     this.reinit = true;
     this.contextMenu = [
       { label: 'Видалити', command: (event) => this.deleteRecord() },
