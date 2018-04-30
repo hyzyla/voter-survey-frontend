@@ -40,6 +40,9 @@ export class TableComponent implements OnInit, AfterViewInit {
   tableHeight: string;
   reinit: boolean;
   selectedColumns: any[];
+  currentConstituency;
+
+  @Input() user;
 
   constructor(
     private statusService: StatusService,
@@ -105,7 +108,11 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   loadData(constituency: Constituency | undefined) {
-    
+    if (this.currentConstituency && !constituency) {
+      constituency = this.currentConstituency;
+    }
+    this.currentConstituency = constituency;
+
     this.records = [];
     if (constituency && constituency.id) {      
       this.territoryService.constituency.getVoters(constituency)

@@ -107,16 +107,31 @@
   <!-- footer -->
   <ng-template pTemplate="summary">
       <div style="text-align:left">
-          <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Додати"></button>
-          <button type="button" pButton icon="fa-edit" (click)="showDialogToEdit()" label="Редагувати"></button>
-          <button type="button" pButton icon="fa-trash" (click)="deleteRecord()" label="Видалити"></button>
-          <button type="button" pButton icon="fa-angle-double-right" (click)="printValue()" label="Призначити"></button>
-          <button type="button" pButton icon="fa-download" (click)="exportRecords(dt)" label="Експорт в CSV"></button>
+          <button *ngIf="(!user.groups.includes(3)) || user.is_staff || user.is_superuser"
+            pButton icon="fa-plus" 
+            (click)="showDialogToAdd()" 
+            label="Додати"></button>
+          <button *ngIf="(!user.groups.includes(3)) || user.is_staff || user.is_superuser"
+            pButton icon="fa-edit" 
+            (click)="showDialogToEdit()" 
+            label="Редагувати"></button>
+          <button *ngIf="(!user.groups.includes(3)) || user.is_staff || user.is_superuser"
+            pButton icon="fa-trash" 
+            (click)="deleteRecord()" 
+            label="Видалити"></button>
+          <button *ngIf="user.groups.includes(4) || user.groups.includes(2) || user.is_staff || user.is_superuser"
+            pButton icon="fa-angle-double-right" 
+            (click)="printValue()" 
+            label="Призначити"></button>
+          <button
+            pButton icon="fa-download" 
+            (click)="exportRecords(dt)" 
+            label="Експорт в CSV"></button>
         </div>
   </ng-template>
 
 </p-table>  
-<voter-dialog
+<voter-dialog *ngIf="!user.groups.includes(3)"
   [(display)]="displayDialog" 
   [voter]="recordData" 
   (onFormSubmit)="saveRecord($event)">

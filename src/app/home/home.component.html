@@ -3,4 +3,4 @@
         (constituencyChanged)="table.loadData($event)"
         (voterAddded)="table.loadData()"
         (statusChanged)="table.loadColumns($event)"></app-header>
-<app-table #table></app-table>
+<app-table [user]="currentUser" #table></app-table>
