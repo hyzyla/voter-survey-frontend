@@ -7,6 +7,7 @@ export class User {
     groups: number[];
 
     constructor(data) {
+        this.id = data.id;
         this.username = data.username;
         this.groups = data.groups;
         this.isStaff = data.is_staff;

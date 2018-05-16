@@ -17,3 +17,14 @@ th{
     text-overflow: ellipsis;
     max-width: 150px;
   }
+
+
+::ng-deep div.ui-dialog-content.ui-widget-content {
+    height: 500px;
+}
+
+::ng-deep div.assign-list {
+  width: 100%;
+  overflow: scroll;
+  height: 100%;
+}

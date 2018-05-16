@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { AlertService } from '../_services';
+import { AlertService, AuthenticationService } from '../_services';
 import 'rxjs/add/operator/do';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { environment } from '../../environments/environment';
+import { routing } from '../app.routing'
+import { Router } from '@angular/router';
 
 let baseUrl = environment.urlApi;
 console.log(environment);
@@ -39,7 +41,11 @@ function get_error_msg(error) {
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-  constructor(public alertServcie: MessageService) {}
+  constructor(
+    public alertServcie: MessageService,
+    public authService: AuthenticationService,
+    private router: Router
+  ) {}
    
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -64,7 +70,10 @@ export class JwtInterceptor implements HttpInterceptor {
           detail:  get_error_msg(error),
         });
       }
-      console.log(error);;
+      if (get_error_msg(error).includes('Signature')) {
+        //this.authService.logout();
+        this.router.navigate(['/logout']);
+      }
      });
      
   }

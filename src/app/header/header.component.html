@@ -1,17 +1,17 @@
   <mat-toolbar color="primary" class="mat-elevation-z1">
     <mat-toolbar-row>
-      <span *ngIf="user.isStaff || user.isSuperuser || user.groups.includes(4)">
+      <span *ngIf="user.is_staff || user.is_superuser || user.groups.includes(4)">
         <button mat-button (click)="displayStatusManager=true"><span>Статуси</span></button>
         <app-statuses [(display)]="displayStatusManager" (displayChange)="onStatusesChanged()"></app-statuses>
       </span>
-      <span *ngIf="user.isStaff || user.isSuperuser || user.groups.includes(4)">
+      <span *ngIf="user.is_staff || user.is_superuser || user.groups.includes(4)">
         <button mat-button (click)="displayTerritoryManager=true"><span>Дільниці</span></button>
         <app-territories (voterAddded)="voterAddded.emit($event)" [(display)]="displayTerritoryManager"></app-territories>
       </span>
-      <span *ngIf="user.isStaff || user.isSuperuser || user.groups.includes(4)">
+      <span *ngIf="user.is_staff || user.is_superuser || user.groups.includes(4)">
         <button mat-button (click)="displayAdminPanel()">Адмін панель</button>
       </span>
-      <span *ngIf="user.isStaff || user.isSuperuser || user.groups.includes(4) || user.groups.includes(2)">
+      <span *ngIf="user.is_staff || user.is_superuser || user.groups.includes(4) || user.groups.includes(2)">
           <button mat-button [matMenuTriggerFor]="constituencyMenu" (click)="updateConstituencies()">
             <span *ngIf="selectedConstrituency">{{ selectedConstrituency.pname }}<i class="material-icons md-24" style="vertical-align: middle">keyboard_arrow_down</i></span>
           </button>

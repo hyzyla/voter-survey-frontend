@@ -115,13 +115,13 @@
             pButton icon="fa-edit" 
             (click)="showDialogToEdit()" 
             label="Редагувати"></button>
-          <button *ngIf="(!user.groups.includes(3)) || user.is_staff || user.is_superuser"
+          <button *ngIf="((!user.groups.includes(3) && !user.groups.includes(1)) || user.is_staff || user.is_superuser)"
             pButton icon="fa-trash" 
             (click)="deleteRecord()" 
             label="Видалити"></button>
           <button *ngIf="user.groups.includes(4) || user.groups.includes(2) || user.is_staff || user.is_superuser"
             pButton icon="fa-angle-double-right" 
-            (click)="printValue()" 
+            (click)="showDialogToAssign()" 
             label="Призначити"></button>
           <button
             pButton icon="fa-download" 
@@ -131,8 +131,38 @@
   </ng-template>
 
 </p-table>  
-<voter-dialog *ngIf="!user.groups.includes(3)"
+
+<voter-dialog *ngIf="!user.groups.includes(3) && recordData" 
   [(display)]="displayDialog" 
   [voter]="recordData" 
   (onFormSubmit)="saveRecord($event)">
 </voter-dialog>
+
+
+<p-dialog
+				appendTo="body" 
+				[(visible)]="displayAssignDialog"
+        [width]="300"
+        [modal]="true"
+        [autoAlign]="true">
+  <p-header>
+      <span>Оберіть операторів</span>
+  </p-header>
+
+  <p-listbox 
+    [options]="operators" 
+    [checkbox]="true"
+    [multiple]="true"
+    [readonly]="true"
+    styleClass="assign-list"
+    [(ngModel)]="selectedOperators"></p-listbox>
+
+    <p-footer>
+      <button
+        pButton icon="fa-angle-double-right" 
+        (click)="assignVoters()" 
+        label="Призначити">
+      </button>
+    </p-footer>
+  
+</p-dialog>

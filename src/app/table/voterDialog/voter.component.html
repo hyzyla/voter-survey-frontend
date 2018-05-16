@@ -3,9 +3,7 @@
 				[(visible)]="display"
         [width]="700"
         [modal]="true"
-        
         [autoAlign]="true"
-        
         (onHide)="onHide(sSelect)">
   <p-header>
       <span>Виборець ID {{ voter.id }}</span>
@@ -18,8 +16,8 @@
           <form (ngSubmit)="onSubmit()" #modelForm="ngForm" style="width: 100%;">
             
             <!-- Вибір дільниці -->
-            <div class="form-group">
-              <station-select
+            <div class="form-group" *ngIf="voter">
+              <station-select 
                 [station]="voter.station"
                 (onStationChange)="loadAttributes($event)"
                 #sSelect></station-select>

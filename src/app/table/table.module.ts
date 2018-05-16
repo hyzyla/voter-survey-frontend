@@ -4,6 +4,7 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { VoterDialog } from './voterDialog/voter.component';
+import { AssignDialog } from './assignDialog/assign.component';
 import { DialogModule } from 'primeng/dialog';
 import { StationSelectComponent } from './stationSelect/stationSelect.component';
 import { DropdownModule } from 'primeng/dropdown';
@@ -17,12 +18,14 @@ import { SpinnerModule } from 'primeng/spinner';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
+import {ListboxModule} from 'primeng/listbox';
 
 @NgModule({
     declarations: [
       TableComponent,
       VoterDialog,
-      StationSelectComponent
+      StationSelectComponent,
+      AssignDialog
     ],
     imports: [
       TableModule,
@@ -39,7 +42,8 @@ import { CheckboxModule } from 'primeng/checkbox';
       SpinnerModule,
       ScrollPanelModule,
       TooltipModule,
-      CheckboxModule
+      CheckboxModule,
+      ListboxModule,
     ],
     exports: [
       TableComponent,

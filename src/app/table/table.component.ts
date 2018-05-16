@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, HostListener, Input } from '@angular/core';
 import { RecordSerivce, VoterService } from '../_services/index';
-import { Voter, Status, Constituency } from '../_models';
+import { Voter, Status, Constituency, User } from '../_models';
 import { StatusService } from '../_services/status.service';
 import { ObjectUtils } from 'primeng/components/utils/objectutils';
 import { MenuItem, SelectItem } from 'primeng/api';
@@ -8,6 +8,7 @@ import { ConstituencyService, TerritoryService } from '../_services/territory.se
 import { Observable } from 'rxjs';
 import { AlertService } from '../_services/alert.service';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { UserService } from '../_services/user.service';
 
 ObjectUtils.prototype.resolveFieldData = function (data, field) {
   if (data && field) {
@@ -28,6 +29,9 @@ ObjectUtils.prototype.resolveFieldData = function (data, field) {
   ]
 })
 export class TableComponent implements OnInit, AfterViewInit {
+  operators: any;
+  selectedOperators: any[];
+  displayAssignDialog: boolean = false;
   records: any[];
   cols: any[];
   newRecord: boolean;
@@ -48,7 +52,9 @@ export class TableComponent implements OnInit, AfterViewInit {
     private statusService: StatusService,
     private voterService: VoterService,
     private territoryService: TerritoryService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private userService: UserService,
+  ) { }
 
   ngAfterViewInit() {
     
@@ -104,7 +110,7 @@ export class TableComponent implements OnInit, AfterViewInit {
         }
     ]
     this.loadData(undefined);
-    
+    this.loadUsers();
   }
 
   loadData(constituency: Constituency | undefined) {
@@ -124,6 +130,14 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.loadColumns(constituency);
   }
   
+  loadUsers() {
+    this.userService.getAllOperators()
+    .subscribe((users: User[]) => this.operators = users.map(
+      value => <Object>{label: value.username, value: value}
+    ));
+  }
+
+
   loadColumns(constituency: Constituency | undefined) {
     this.cols = [];
     if (constituency && constituency.id) {    
@@ -230,6 +244,14 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.displayDialog = true;
   }
 
+  showDialogToAssign() {
+    if (!(this.selectedRecord instanceof Array)) {
+      this.selectedRecord = [this.selectedRecord]
+    }
+    this.displayAssignDialog = true;
+    console.log("Assign ", this.displayAssignDialog);
+  }
+
   fromVoterToRow(voter: Voter) {
     let attrib = voter.attrib;
     attrib['id'] = voter.id;
@@ -272,5 +294,15 @@ export class TableComponent implements OnInit, AfterViewInit {
       record[field] = r[field];
     }
     return record;
+  }
+
+  assignVoters() {
+    let observables = this.selectedOperators.map(value =>  this.userService.assignVoters(value, this.selectedRecord));
+    Observable.forkJoin(observables).subscribe(_ => {
+      this.messageService.add({severity:'success', summary:'Успіх', detail:'Запис успішно збережено'})
+      this.selectedOperators = [];
+    });
+    this.displayAssignDialog = false;
+    
   }
 }

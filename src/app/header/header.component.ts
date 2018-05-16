@@ -23,7 +23,7 @@ import { environment } from '../../environments/environment';
 
 })
 export class HeaderComponent implements OnInit {
-  @Input() user: User
+  @Input() user: any; 
   displayStatusManager: boolean = false;
   displayTerritoryManager: boolean = false;
   selectedConstrituency: Constituency;

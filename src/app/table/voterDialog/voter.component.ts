@@ -21,9 +21,10 @@ export class VoterDialog {
   @Output() onFormSubmit = new EventEmitter();
   @Input() voter;
 
-  constructor(private territoryService: TerritoryService,
-              private statusService: StatusService,
-              private voterService: VoterService) { }
+  constructor(
+    private territoryService: TerritoryService,
+    private statusService: StatusService,
+    private voterService: VoterService) { }
 
   set display(value: boolean) {
     this._display = value;
