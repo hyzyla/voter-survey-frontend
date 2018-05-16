@@ -2,15 +2,15 @@ export class User {
     id: number;
     username: string;
     password: string;
-    isStaff: boolean;
-    isSuperuser: boolean;
+    is_staff: boolean;
+    is_superuser: boolean;
     groups: number[];
 
     constructor(data) {
         this.id = data.id;
         this.username = data.username;
         this.groups = data.groups;
-        this.isStaff = data.is_staff;
-        this.isSuperuser = data.is_superuser;
+        this.is_staff = data.is_staff;
+        this.is_superuser = data.is_superuser;
     }
 }

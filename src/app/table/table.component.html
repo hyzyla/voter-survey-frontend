@@ -107,19 +107,19 @@
   <!-- footer -->
   <ng-template pTemplate="summary">
       <div style="text-align:left">
-          <button *ngIf="(!user.groups.includes(3)) || user.is_staff || user.is_superuser"
+          <button *ngIf="(!user.groups.includes('відвідувач')) || user.is_staff || user.is_superuser"
             pButton icon="fa-plus" 
             (click)="showDialogToAdd()" 
             label="Додати"></button>
-          <button *ngIf="(!user.groups.includes(3)) || user.is_staff || user.is_superuser"
+          <button *ngIf="(!user.groups.includes('відвідувач')) || user.is_staff || user.is_superuser"
             pButton icon="fa-edit" 
             (click)="showDialogToEdit()" 
             label="Редагувати"></button>
-          <button *ngIf="((!user.groups.includes(3) && !user.groups.includes(1)) || user.is_staff || user.is_superuser)"
+          <button *ngIf="((!user.groups.includes('відвідувач') && !user.groups.includes('оператор')) || user.is_staff || user.is_superuser)"
             pButton icon="fa-trash" 
             (click)="deleteRecord()" 
             label="Видалити"></button>
-          <button *ngIf="user.groups.includes(4) || user.groups.includes(2) || user.is_staff || user.is_superuser"
+          <button *ngIf="user.groups.includes('адмністратор') || user.groups.includes('модератор') || user.is_staff || user.is_superuser"
             pButton icon="fa-angle-double-right" 
             (click)="showDialogToAssign()" 
             label="Призначити"></button>
@@ -132,7 +132,7 @@
 
 </p-table>  
 
-<voter-dialog *ngIf="!user.groups.includes(3) && recordData" 
+<voter-dialog *ngIf="!user.groups.includes('відвідувач') && recordData" 
   [(display)]="displayDialog" 
   [voter]="recordData" 
   (onFormSubmit)="saveRecord($event)">

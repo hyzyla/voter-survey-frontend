@@ -28,10 +28,10 @@ export class UserService {
     }
 
     getAllOperators(): Observable<User[]> {
-        return this.http.get<User[]>(`${this.url}/operators/`)
+        return this.http.get<User[]>(`${this.url}operators/`)
     }
 
     assignVoters(user, voters: any[]): Observable<any> {
-        return this.http.post(`${this.url}/${user.id}/assign-voters/`, voters.map(v => v.id));
+        return this.http.post(`${this.url}/${user.id}assign-voters/`, voters.map(v => v.id));
     }
 }
