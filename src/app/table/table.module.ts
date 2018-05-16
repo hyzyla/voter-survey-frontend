@@ -4,7 +4,6 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { VoterDialog } from './voterDialog/voter.component';
-import { AssignDialog } from './assignDialog/assign.component';
 import { DialogModule } from 'primeng/dialog';
 import { StationSelectComponent } from './stationSelect/stationSelect.component';
 import { DropdownModule } from 'primeng/dropdown';
@@ -25,7 +24,6 @@ import {ListboxModule} from 'primeng/listbox';
       TableComponent,
       VoterDialog,
       StationSelectComponent,
-      AssignDialog
     ],
     imports: [
       TableModule,
